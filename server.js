@@ -252,13 +252,13 @@ router.get('/api/download-commands', (req, res) => {
     const isSecure = req.secure;
     
     // 调试信息（可以在生产环境中移除）
-    console.log('Headers debug:', {
-      'X-Forwarded-Host': forwardedHost,
-      'X-Forwarded-Proto': forwardedProto,
-      'Host': originalHost,
-      'req.secure': isSecure,
-      'All headers': req.headers
-    });
+    // console.log('Headers debug:', {
+    //   'X-Forwarded-Host': forwardedHost,
+    //   'X-Forwarded-Proto': forwardedProto,
+    //   'Host': originalHost,
+    //   'req.secure': isSecure,
+    //   'All headers': req.headers
+    // });
     
     // 如果有代理头信息，使用代理的信息；否则使用原始信息
     const host = forwardedHost || originalHost;
