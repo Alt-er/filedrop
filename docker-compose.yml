@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  filedrop:
+    build: .
+    ports:
+      - "8035:8035"
+    volumes:
+      # 挂载存储目录到宿主机，这样文件不会在容器重启时丢失
+      - ./uploads:/app/uploads
+    environment:
+      - NODE_ENV=production
+      - PORT=8035
+      - STORAGE_PATH=/app/uploads
+    restart: unless-stopped
+    container_name: filedrop-app

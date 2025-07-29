@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>FileDrop</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📁 FileDrop</h1>
+        </header>
+
+        <div class="toolbar">
+            <button id="uploadBtn" class="btn btn-primary">📤 上传文件</button>
+            <button id="createDirBtn" class="btn btn-secondary">📁 新建目录</button>
+            <button id="refreshBtn" class="btn btn-secondary">🔄 刷新</button>
+        </div>
+
+        <div class="breadcrumb" id="breadcrumb">
+            <span class="breadcrumb-item" data-path="" onclick="fileManager.navigateToPath('')">🏠 根目录</span>
+        </div>
+
+        <div class="file-list" id="fileList">
+            <!-- 搜索框固定在这里 -->
+            <div class="drag-hint">
+                <div class="drag-hint-left">
+                    <span class="drag-hint-icon">📤</span>
+                    <span class="drag-hint-text">支持拖拽上传</span>
+                </div>
+                <div class="drag-hint-right">
+                    <input type="text" id="searchInput" class="search-input" placeholder="🔍 搜索文件..." autocomplete="off" spellcheck="false">
+                </div>
+            </div>
+            <!-- 文件列表容器，只有这部分会被重新渲染 -->
+            <div id="fileListContent">
+                <!-- 文件列表将在这里动态生成 -->
+            </div>
+        </div>
+
+        <!-- 全页面拖拽提示 -->
+        <div id="dragOverlay" class="drag-overlay">
+            <div class="drag-message">
+                <div class="drag-icon">📤</div>
+                <div class="drag-text">释放文件以上传</div>
+            </div>
+        </div>
+
+        <!-- 上传文件模态框 -->
+        <div id="uploadModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>上传文件</h2>
+                <p class="upload-info">最大文件大小: 4GB</p>
+                <input type="file" id="fileInput" multiple>
+                <div class="upload-progress" id="uploadProgress"></div>
+                <button id="uploadConfirmBtn" class="btn btn-primary">上传</button>
+            </div>
+        </div>
+
+        <!-- 新建目录模态框 -->
+        <div id="createDirModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>新建目录</h2>
+                <input type="text" id="dirNameInput" placeholder="请输入目录名称">
+                <button id="createDirConfirmBtn" class="btn btn-primary">创建</button>
+            </div>
+        </div>
+
+        <!-- 下载命令模态框 -->
+        <div id="downloadCommandsModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>下载命令</h2>
+                
+                <div class="command-section">
+                    <h3>wget (支持断点续传)</h3>
+                    <div class="command-box" id="wgetCommand"></div>
+                    <button class="btn btn-primary copy-btn" data-target="wgetCommand">📋 复制 wget</button>
+                </div>
+                
+                <div class="command-section">
+                    <h3>curl</h3>
+                    <div class="command-box" id="curlCommand"></div>
+                    <button class="btn btn-secondary copy-btn" data-target="curlCommand">📋 复制 curl</button>
+                </div>
+                
+                <div class="command-section">
+                    <h3>直链地址</h3>
+                    <div class="command-box" id="directUrl"></div>
+                    <button class="btn btn-secondary copy-btn" data-target="directUrl">📋 复制链接</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
