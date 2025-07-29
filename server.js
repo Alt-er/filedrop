@@ -245,9 +245,9 @@ router.get('/api/download-commands', (req, res) => {
       return res.status(400).json({ error: 'Path is required' });
     }
 
-    // 获取所有相关的头信息用于调试
-    const forwardedHost = req.get('X-Forwarded-Host');
-    const forwardedProto = req.get('X-Forwarded-Proto');
+    // 获取所有相关的头信息用于调试，尝试不同的大小写组合
+    const forwardedHost = req.get('X-Forwarded-Host') || req.get('x-forwarded-host') || req.headers['x-forwarded-host'];
+    const forwardedProto = req.get('X-Forwarded-Proto') || req.get('x-forwarded-proto') || req.headers['x-forwarded-proto'];
     const originalHost = req.get('host');
     const isSecure = req.secure;
     
