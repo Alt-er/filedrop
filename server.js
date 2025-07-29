@@ -245,8 +245,14 @@ router.get('/api/download-commands', (req, res) => {
       return res.status(400).json({ error: 'Path is required' });
     }
 
-    const host = req.get('host');
-    const protocol = req.secure ? 'https' : 'http';
+    // 优先使用 X-Forwarded-Host 和 X-Forwarded-Proto (nginx 代理设置)
+    const forwardedHost = req.get('X-Forwarded-Host');
+    const forwardedProto = req.get('X-Forwarded-Proto');
+    
+    // 如果有代理头信息，使用代理的信息；否则使用原始信息
+    const host = forwardedHost || req.get('host');
+    const protocol = forwardedProto || (req.secure ? 'https' : 'http');
+    
     const downloadUrl = `${protocol}://${host}/filedrop/api/download?path=${encodeURIComponent(requestedPath)}`;
     
     // 获取文件名

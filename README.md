@@ -29,7 +29,7 @@ docker compose up -d
 ```
 
 3. 访问应用：
-打开浏览器访问 `http://localhost:3000/filedrop`
+打开浏览器访问 `http://localhost:8035`
 
 ### 本地开发
 
@@ -44,7 +44,7 @@ npm start
 ```
 
 3. 访问应用：
-打开浏览器访问 `http://localhost:8035/filedrop`
+打开浏览器访问 `http://localhost:8035`
 
 ## Nginx 配置示例
 
@@ -59,6 +59,7 @@ server {
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-Host $host;
     }
 }
 ```
