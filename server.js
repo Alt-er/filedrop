@@ -245,13 +245,24 @@ router.get('/api/download-commands', (req, res) => {
       return res.status(400).json({ error: 'Path is required' });
     }
 
-    // 优先使用 X-Forwarded-Host 和 X-Forwarded-Proto (nginx 代理设置)
+    // 获取所有相关的头信息用于调试
     const forwardedHost = req.get('X-Forwarded-Host');
     const forwardedProto = req.get('X-Forwarded-Proto');
+    const originalHost = req.get('host');
+    const isSecure = req.secure;
+    
+    // 调试信息（可以在生产环境中移除）
+    console.log('Headers debug:', {
+      'X-Forwarded-Host': forwardedHost,
+      'X-Forwarded-Proto': forwardedProto,
+      'Host': originalHost,
+      'req.secure': isSecure,
+      'All headers': req.headers
+    });
     
     // 如果有代理头信息，使用代理的信息；否则使用原始信息
-    const host = forwardedHost || req.get('host');
-    const protocol = forwardedProto || (req.secure ? 'https' : 'http');
+    const host = forwardedHost || originalHost;
+    const protocol = forwardedProto || (isSecure ? 'https' : 'http');
     
     const downloadUrl = `${protocol}://${host}/filedrop/api/download?path=${encodeURIComponent(requestedPath)}`;
     
@@ -263,7 +274,18 @@ router.get('/api/download-commands', (req, res) => {
       curl: `curl -L -o "${fileName}" "${downloadUrl}"`
     };
     
-    res.json({ commands, url: downloadUrl });
+    res.json({ 
+      commands, 
+      url: downloadUrl,
+      debug: {
+        forwardedHost,
+        forwardedProto,
+        originalHost,
+        isSecure,
+        finalProtocol: protocol,
+        finalHost: host
+      }
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
