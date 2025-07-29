@@ -19,13 +19,13 @@
 
 1. 克隆项目：
 ```bash
-git clone <repository-url>
+git clone https://github.com/Alt-er/filedrop.git
 cd filedrop
 ```
 
 2. 启动服务：
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
 3. 访问应用：
