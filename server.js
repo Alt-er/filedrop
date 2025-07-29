@@ -22,7 +22,18 @@ function isPathSafe(requestedPath) {
 // 配置 multer 文件上传
 const storage = multer.diskStorage({
   destination: (req, _, cb) => {
-    const uploadPath = req.body.path || '';
+    // multer 会在解析完 form fields 后才填充 req.body
+    let uploadPath = '';
+    
+    if (req.body && req.body.path !== undefined) {
+      uploadPath = req.body.path;
+    }
+    
+    // 确保路径格式正确
+    if (uploadPath && !uploadPath.startsWith('/')) {
+      uploadPath = uploadPath.replace(/^\/+/, '');
+    }
+    
     const fullPath = path.join(STORAGE_PATH, uploadPath);
     
     if (!isPathSafe(fullPath)) {
@@ -168,7 +179,8 @@ router.post('/api/upload', (req, res) => {
       res.json({ 
         success: true, 
         message: '文件上传成功',
-        filename: req.file.filename 
+        filename: req.file.filename,
+        path: req.body.path || ''
       });
     } catch (error) {
       res.status(500).json({ error: error.message });

@@ -371,8 +371,8 @@ class FileManager {
             for (let i = 0; i < files.length; i++) {
                 const file = files[i];
                 const formData = new FormData();
-                formData.append('file', file);
                 formData.append('path', this.currentPath);
+                formData.append('file', file);
 
                 progressDiv.innerHTML = `上传进度: ${i + 1}/${files.length} - ${file.name}`;
 
